@@ -36,6 +36,7 @@ router
 }),
 
 
+
     router.get('/productos/:id', (req, res) => {
         const id = req.params.id;
         const producto = Productos.find(producto => producto.id == id);
@@ -65,7 +66,7 @@ router.post('/productos/:id', (req, res) => {
     const id = req.params.id;
     const producto = Productos.find(producto => producto.id == id);
     if (producto) {
-        res.send(producto);
+        res.send( producto);
     }
 }
 )
@@ -73,7 +74,7 @@ router.post('/productos/:id', (req, res) => {
 router.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('ups, algo salió mal');
-    next();
+    next(err);
 
 }
 )
@@ -87,5 +88,20 @@ router.use((err, req, res, next) => {
  
 //  }
 //  )
+//update producto
+router.put('/productos/:id', (req, res) => {
+    const id = req.params.id;
+    const producto = Productos.find(producto => producto.id == id);
+    if (producto) {
+        producto.name = "producto renombrado";
+        producto.price = 200;
+        producto.description = "descripcion nueva";
+        producto.image = req.body.image;
+        res.send(producto);
+    }
+}
+)
+
+
 
 module.exports = router;
