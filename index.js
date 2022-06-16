@@ -1,18 +1,19 @@
-import fs from 'fs';
+const fs = require('fs');
 const datos = JSON.parse(fs.readFileSync("./productos.json", 'utf-8'));
 
-export class Productos
-
+module.exports= class Productos
 
 {
-
-getAll ()
+    constructor()
 {
-
-    return datos;
-
-    
+    this.productos = datos;
 }
+
+    getAll()
+{
+    return this.productos;
+}
+
 
 addProduct ()
 {
@@ -36,12 +37,9 @@ getRandom ()
 
 
 
+
 }
 
-        
-
-
-    export default Productos;
 
 
 

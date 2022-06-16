@@ -1,57 +1,36 @@
-import express from 'express';
-import Productos from './index.js'
+const express = require("express");
+const router = require("./routes.js");
+const path  = require('path');
+const nuevo = path.join(__dirname, 'views');
+const app = express();
+app.use(express.urlencoded({ extended: true }));
 
-export class Server
-{
-  constructor ()
-  {
-    this.app = express();
-    this.port = 8080
-    this.routes()
-    this.listen()
-    this.productos = new Productos()
-  }
+const agregar = [];
 
-  routes ()
-  {
-    this.app.get( '/', ( req, res ) =>
-    {
-      const prueba = async () =>
-      {
-        const prod = this.productos.getAll()
-        res.send( prod )
-      }
-      prueba()
-    } )
+app.get("/agregar",( req, res) => {
 
-    this.app.get( '/nuevo', ( req, res ) =>
-      {
-         const prueba = async () =>
-         {
-            const prod = this.productos.addProduct()
-            res.send( prod )
-         }
-         prueba()
-         }
-      )
-      this.app.get( '/random', ( req, res ) =>
-      {
-         const prueba = async () =>
-         {
-            const prod = this.productos.getRandom()
-            res.send( prod )
-         }
-         prueba()
-         }
-      )
-  }
-  listen ()
-  {
-    this.app.listen( this.port, () =>
-    {
-      console.log( 'corriendo en el puerto ', this.port )
-    } )
-  }
-
+  req.get(   "index.html", {root : nuevo});
+   res.sendFile(path.join(__dirname, 'index.html'));
 }
-const server = new Server();
+)
+
+app.post('api/productos', (req, res) => {
+agregar.push(req.query)
+res.send(agregar);
+redirect('/agregar');
+      
+}
+)
+
+app.use(express.json());
+app.use("/api", router);
+//
+
+
+app.listen(8080);
+console.log("Server running on port 8080");
+
+
+
+  
+
