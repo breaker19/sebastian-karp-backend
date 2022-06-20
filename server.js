@@ -1,38 +1,47 @@
 const express = require("express");
 const router = require("./routes.js");
-const path  = require('path');
-const nuevo = path.join(__dirname, 'views');
-const Productos = require('./productos.json');
 const app = express();
-app.use(express.urlencoded({ extended: true }));
-
-
-
-app.get("/agregar",( req, res) => {
-   res.sendFile(path.join(__dirname, 'index.html'));
-}
-)
-
-app.post('/agregar', (req, res) => {
-   res.sendFile(path.join(__dirname, 'index.html'));
- req.body = req.body;
-   console.log(req.body);
-      Productos.push(agregar);
-
- 
-      res.send(agregar);
-     
-      
-}
-)
-
+const Products = require("./productsRoutes");
+const DATA_BASE = new Products("Users/Usuario/Desktop/sebastian-karp-backend/productos");
+const AllProds = DATA_BASE.getAllProducts()
 app.use(express.json());
 app.use("/api", router);
-//
+app.use("/api/agregar", router);
+app.set("view engine", "ejs");
+
 
 
 app.listen(8080);
 console.log("Server running on port 8080");
+
+app.get('/api/agregar', (req, res) => {
+  
+    res.sendFile(__dirname + '/index.html');
+    console.log(AllProds);
+}
+)
+
+
+app.post( '/agregar', async ( req, res ) =>
+{
+    try {
+        const producto = req.body;
+        const all = await DATA_BASE.getAllProducts();
+        const newProd = producto;
+        producto.id = all.length + 1;
+        all.push(newProd);
+        await DATA_BASE.createProduct(producto);
+        res.send(all);
+        console.log(all);
+    }
+    catch ( error ) {
+        console.log( error )
+    }
+}
+)
+
+
+
 
 
 
