@@ -4,29 +4,42 @@ const { Router } = express;
 const router = Router();
 const app = express();
 
+const productosPrueba = []
+
 
 router
 .route( '/productos')
 
-.get( (req, res) => {
-    res.send(Productos);
-   
-}
-)
+router.get("/productos/", (req , res) => {
+    res.render("productosPrueba", {productos: Productos});
 
-.post( (req, res) => {
-    const producto = {
-        id: Productos.length + 1,
-        name: "Producto " + (Productos.length + 1),
-        price: Math.floor(Math.random() * 100) + 1,
-        description: "Descripcion del producto " + (Productos.length + 1),
-        image: "https://picsum.photos/200/300"
-    }
-    Productos.push(producto);
-    res.send(producto);
-}
+})
+// router.get("/agregar/", (req , res) => {
+//     res.render("productosPrueba", {productos: Productos});
 
-)
+// })
+
+router.get("/form/", (req , res) => {
+    res.render("datos");
+    console.log("hola");
+
+})
+
+// .post( (req, res) => {
+// let id = req.params.id - 1;
+// try {
+//     const baseProductos = JSON.parse(req.body)
+//     Productos.push(baseProductos);
+//     res.send(Productos);}
+
+//     catch (error) {
+//         res.send(error);
+//     }
+// }
+
+
+
+// )
 .delete((req, res) => {
     const Producto = 
         Productos.splice(0, Productos.length);
@@ -37,14 +50,7 @@ router
 
 
 
-    router.get('/productos/:id', (req, res) => {
-        const id = req.params.id;
-        const producto = Productos.find(producto => producto.id == id);
-        if (producto) {
-            res.send(producto);
-        }
-    }
-    )
+
     router.post('/productos/:id', (req, res) => {
         const id = req.params.id;
         const producto = Productos.find(producto => producto.id == id);
@@ -78,16 +84,7 @@ router.use((err, req, res, next) => {
 
 }
 )
-// router.post('/index.html', (req, res) => {
-//     const agregar = req.query
-//     Productos.push(agregar)
-//     res.send(agregar);
-//     console.log(agregar);
- 
-//  res.redirect("/productos");
- 
-//  }
-//  )
+
 //update producto
 router.put('/productos/:id', (req, res) => {
     const id = req.params.id;
@@ -98,6 +95,7 @@ router.put('/productos/:id', (req, res) => {
         producto.description = "descripcion nueva";
         producto.image = req.body.image;
         res.send(producto);
+
     }
 }
 )
