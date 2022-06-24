@@ -9,23 +9,21 @@
     <form class="jumbotron" action="/agregar" method="post">
         <div class="form__group">
             <label for="name">Product Name</label>
-            <input id="name" type="text" name="title" placeholder="Product name" required />
+            <input id="name" type="text" name="name" placeholder="Product name" required />
         </div>
   
         <div class="form__group">
             <label for="description"> Description</label>
             <input id="description" type="text" name="description" placeholder="Product description" required />
+        </div>
+
         <div class="form__group">
             <label for="price">Product Price</label>
             <input id="price" type="number" name="price" placeholder="120.000" required />
         </div>
-        <div class="form__group">
-            <label for="image">Product Image</label>
-            <input id="image" type="text" name="thumbnail" placeholder="Image URL" required />
-        </div>
 
         <div class="form__group">
-            <button type="submit">Add New Product</button>
+            <button>Add New Product</button>
         </div>
     
     </form>

@@ -2,11 +2,12 @@ const express = require("express");
 const router = require("./routes.js");
 const app = express();
 const Productos = require('./productos.json');
+
+const fs = require('fs'); 
 app.use(express.json());
 app.use("/api", router);
 app.set("views", "./views");
 app.set("view engine", "ejs");
-
 app.listen(8080);
 console.log("Server running on port 8080");
 
@@ -16,11 +17,29 @@ app.get("/", (req, res) => {
     res.render("inicio", { productos: Productos });
   });
 
-  app.post("/agregar", (req, res) => {
-    const producto = req.body;
-    Productos.push(producto);
-    res.redirect("/");
+  app.get("/agregar", (req, res) => {
+    res.render("inicio", { productos: Productos });
   });
+
+const algo = { productos: Productos }
+  app.post("/agregar",  (req, res) => {
+
+    
+    const id = Productos.length + 1;
+    algo.id = id;
+    algo.name = req.body;
+    algo.price = req.body;
+    algo.description = req.body;
+    Productos.push(algo);
+    res.redirect("/agregar");
+    console.log(algo);
+
+
+  }
+  );
+
+
+
 
 
 //   app.post("/productos", (req, res) => {
