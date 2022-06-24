@@ -1,8 +1,6 @@
 const express = require("express");
-fs = require("fs");
 const router = require("./routes.js");
 const app = express();
-const todos = require("./vistaProductos.js");
 const Productos = require('./productos.json');
 app.use(express.json());
 app.use("/api", router);

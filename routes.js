@@ -19,11 +19,7 @@ router.get("/productos/", (req , res) => {
 
 // })
 
-router.get("/form/", (req , res) => {
-    res.render("datos");
-    console.log("hola");
 
-})
 
 // .post( (req, res) => {
 // let id = req.params.id - 1;
@@ -36,8 +32,6 @@ router.get("/form/", (req , res) => {
 //         res.send(error);
 //     }
 // }
-
-
 
 // )
 .delete((req, res) => {
