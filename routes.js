@@ -2,16 +2,17 @@ const Productos = require('./productos.json');
 const express = require("express");
 const { Router } = express;
 const router = Router();
-const app = express();
+const path = require('path');
+const fs = require('fs');
 
-const productosPrueba = []
+
 
 
 router
 .route( '/productos')
 
 router.get("/productos/", (req , res) => {
-    res.render("productosPrueba", {productos: Productos});
+    res.render("inicio", { productos: Productos });
 
 })
 // router.get("/agregar/", (req , res) => {
@@ -19,7 +20,12 @@ router.get("/productos/", (req , res) => {
 
 // })
 
-
+// .save((req, res) => {
+//     const Producto =
+//         Productos.splice(0, Productos.length);
+//         res.send(Producto);
+// }
+// )
 
 // .post( (req, res) => {
 // let id = req.params.id - 1;
@@ -41,6 +47,9 @@ router.get("/productos/", (req , res) => {
     
 
 }),
+
+
+
 
 
 

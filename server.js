@@ -1,42 +1,66 @@
 const express = require("express");
+const { Server: HttpServer } = require('http')
+const { Server: IOServer } = require('socket.io')
 const router = require("./routes.js");
+const path = require('path')
 const app = express();
-const Productos = require('./productos.json');
-
-const fs = require('fs'); 
-app.use(express.json());
-app.use("/api", router);
+const Productos = require('./index.js');
+const jsonProductos = require('./productos.json');
+const datos = new Productos();
 app.set("views", "./views");
 app.set("view engine", "ejs");
-app.listen(8080);
-console.log("Server running on port 8080");
+const httpServer = new HttpServer(app)
+const io = new IOServer(httpServer)
+
+app.use(express.json());
+app.use(express.static('public'))
+app.use("/api", router);
+
+const messages = [];
 
 
 
-app.get("/", (req, res) => {
-    res.render("inicio", { productos: Productos });
+io.on('connection',socket => {
+  console.log('Un cliente se ha conectado');
+
+
+  socket.emit('messages', messages);
+
+
+  socket.on('new-message',(data) => {
+    messages.push(data);
+      io.sockets.emit('messages', messages);
   });
+});
 
-  app.get("/agregar", (req, res) => {
-    res.render("inicio", { productos: Productos });
-  });
 
-const algo = { productos: Productos }
+
+
+
+app.get("/agregar", (req, res) => {
+  path.join(__dirname, './productos.json')
+
+  res.render("inicio", { productos: jsonProductos });
+  console.log(jsonProductos);
+
+});
+
+// app.get('/agregar', (req, res) => {
+//   res.sendFile('./public/index.html' , { root: __dirname });
+
+// })
+
+
+
+
   app.post("/agregar",  (req, res) => {
-
-    
-    const id = Productos.length + 1;
-    algo.id = id;
-    algo.name = req.body;
-    algo.price = req.body;
-    algo.description = req.body;
-    Productos.push(algo);
+    const producto = req.body;
+    datos.addProduct(producto);
     res.redirect("/agregar");
-    console.log(algo);
-
 
   }
   );
+
 
 
 
@@ -48,20 +72,6 @@ const algo = { productos: Productos }
 //   });
 
 
-// const baseProductos = JSON.parse(
-//     require("fs").readFileSync("./productos.json")
-// )
-
-// app.post('/agregar', (req, res) => {
-// //add resultado del form a Productos y verlo en api/productos
-//      baseProductos.push(req.body);
-//     Productos.push(baseProductos);
-//     res.send(Productos);
-// console.log(baseProductos);
-
-
-//  }
-//  )
 
 // app.delete("/datos/", (req, res) => {
 //     Productos.splice(0, Productos.length);
@@ -100,7 +110,9 @@ app.get("/pruebas", (req, res) => {
 
 // )
 
-
+httpServer.listen(8080, function () {
+  console.log("Servidor corriendo en http://localhost:8080");
+});
 
 
 
