@@ -1,33 +1,47 @@
 const fs = require('fs');
 const datos = JSON.parse(fs.readFileSync("./productos.json", 'utf-8'));
-
-module.exports= class Productos
+const path = require('path');
+ class Productos
 
 {
     constructor()
 {
-    this.productos = datos;
+    this.name = Productos.name;
+    this.price = Productos.price;
 }
 
-    getAll()
+   async  getAll()
 {
-    return this.productos;
+ try {
+    const all = JSON.parse(
+        await fs.promises.readFile( `./${ this.name, this.price, this.description }.json` )
+    )
+    return all
+} catch ( err ) {
+    console.log( err )
+}
 }
 
 
-addProduct ()
-{
-    const producto = {
-        id: datos.length + 1,
-        name: "Producto " + (datos.length + 1),
-        price: Math.floor(Math.random() * 100) + 1,
-        description: "Descripcion del producto " + (datos.length + 1)
-        
 
+async addProduct (id)
+{
+    try {
+        const producto = await fs.promises.readFile( path.join(__dirname, 'productos.json') )
+        const productos = JSON.parse(producto)
+        productos.push(id)
+        await fs.promises.writeFile( path.join(__dirname, 'productos.json'), JSON.stringify(productos) )
+       .then(() => {
+              console.log()
+         }
+         )
+
+
+    } catch ( err ) {
+        console.log( err )
     }
-    datos.push(producto);
-    return producto;
 }
+
 
 getRandom ()
 {
@@ -35,11 +49,8 @@ getRandom ()
     return datos[random];
 }
 
-
-
-
 }
-
+module.exports = Productos;
 
 
 
