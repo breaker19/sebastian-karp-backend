@@ -26,20 +26,18 @@ const path = require('path');
 
 async addProduct (id)
 {
+//add product when de form in datos.ejs is submitted
     try {
-        const producto = await fs.promises.readFile( path.join(__dirname, 'productos.json') )
-        const productos = JSON.parse(producto)
-        productos.push(id)
-        await fs.promises.writeFile( path.join(__dirname, 'productos.json'), JSON.stringify(productos) )
-       .then(() => {
-              console.log()
-         }
-         )
-
-
-    } catch ( err ) {
+        const producto = JSON.parse(
+            await fs.promises.readFile( `./${ this.name, this.price, this.description }.json` )
+        )
+        producto.push(id);
+        await fs.promises.writeFile( `./${ this.name, this.price, this.description }.json`, JSON.stringify( producto ) )
+    }
+    catch ( err ) {
         console.log( err )
     }
+    
 }
 
 

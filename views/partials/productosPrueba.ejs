@@ -1,14 +1,25 @@
+<script src="main.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <h2 style="color:crimson;">Todos los productos</h2>
-
+<script src="/socket.io/socket.io.js"></script>
+    <script src="../productos.js"></script>
 <% if(productos.length > 0){ %>
-    <div class="table-responsive">
+    <div id="borrarProducto" class="table-responsive">
         <table class="table table-dark">
             <% for (const producto of productos) {%>
             <tr>
                 <td><%-producto.name%></td>
                 <td><%-producto.price%></td>
                 <td><%-producto.description%></td>
-                
+             
+                <td><img src="https://picsum.photos/200/300?random=<%-producto.id%>" width="80" height="80" alt=""></td>
+                <td>
+                 <button class="btn btn-danger botonBorrar" onclick="borrarProducto(e)">Borrar</button>        
+                 //onclick add to cart in cart.js 
+            
+                 <input type="submit" value="borrar">
+                </td>
+
             </tr>
             <%};%>
         </table>
@@ -16,6 +27,32 @@
 <% } else{ %>
     <h3 class="alert alert-danger">no se encontraron datos</h1>
 <% } %>
-
+<script>
+    function borrarProducto(e){
+        e.preventDefault();
+        var id = e.target.parentNode.parentNode.children[0].innerText;
+        console.log(id);
+        $.ajax({
+            url: 'http://localhost:8080/agregar/'+id,
+            type: 'DELETE',
+            success: function(result){
+                console.log(result);
+                window.location.reload();
+            }
+        });
+    }
+    function agregarProducto(e){
+        e.preventDefault();
+        var id = e.target.parentNode.parentNode.children[0].innerText;
+        console.log(id);
+        $.ajax({
+            url: 'http://localhost:8080/agregar/'+id,
+            type: 'GET',
+            success: function(result){
+                console.log(result);
+                window.location.reload();
+            }
+        });
+    }
 
 

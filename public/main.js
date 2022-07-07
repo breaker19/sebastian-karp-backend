@@ -1,4 +1,4 @@
- 
+import { writeFile } from 'fs';
 const socket = io.connect();
 socket.on('messages', (data) => {
     console.log(data);
@@ -8,12 +8,9 @@ function render(data) {
     const html = data.map((elem, index) => {
         return(`<div>
      
-            <strong style="color: red;">${elem.author}</strong>:
-            <em style="color: blue;">${elem.text}</em>
-            <strong>${elem.fecha} </strong>
-       
-            
-       
+            <strong style="color: red;">${elem.producto}</strong>:
+            <em style="color: blue;">${elem.precio}</em>
+            <p>${elem.info}</p>
             </div>`)
 
     }).join(" ");
@@ -21,9 +18,9 @@ function render(data) {
 }
 function addMessage(e) {
     const mensaje = {
-        author: document.getElementById("username").value,
-        text: document.getElementById('texto').value,
-        fecha: document.getElementById('fecha').value,
+        producto: document.getElementById("name").value,
+        precio: document.getElementById('price').value,
+        info: document.getElementById('description').value,
     };
     socket.emit('new-message', mensaje);
     return false;
@@ -31,7 +28,21 @@ function addMessage(e) {
 
 
 
+
+
 socket.on("messages", function (data) {
     render(data);
   });
-  // para que no se vea en el html
+//save the information in pruebas.json with the information of the form in index.html
+
+// fs.writeFileSync('./pruebas.json', JSON.stringify(addMessage())
+
+//     , (err) => {
+//         if (err) {
+//             console.log(err);
+//         }
+//         else {
+//             console.log('The file has been saved!');
+//         }
+//     }
+//     )
