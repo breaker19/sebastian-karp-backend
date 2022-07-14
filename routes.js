@@ -13,34 +13,25 @@ router
 .route( '/productos')
 
 router.get("/productos/", (req , res) => {
-    res.render("inicio", { productos: Productos });
+  res.send(Productos);
+  
 
 }
 
 )
 //productos/:id
 router.get("/productos/:id", (req , res) => {
-    const id = req.params.id;
-    const producto = Productos.find(producto => producto.id == id);
+try {
+    const producto = Productos.find(producto => producto.id == req.params.id);
     res.render("producto", { producto });
+
 }
+catch(error) {
+    res.status(404).send("Producto no encontrado");
+}
+}
+
 )
-
-//POST /api/productos asincrono 
-
-
-
-
-
-router.get("/agregar/", (req , res) => {
-    res.render("productosPrueba", {productos: Productos});
-
-})
-router.get("/agregar/:id", (req , res) => {
- res.send(req.params.id);
- console.log(req.params.id);
-
-})
 
 
 
@@ -58,42 +49,25 @@ try {
 
  )
 //delete by id productos
-router.delete("/agregar/:id", (req, res) => {
-    const id = req.params.id;
-    const productos = Productos.splice(0, Productos.length);
-    res.send(productos);
-}
-)
-router.delete((req, res) => {
-    const Producto = 
-        Productos.splice(0, Productos.length);
-        res.send(Producto);
-    
-
-}),
-
-//eliminar al clickear en un boton por id productos 
 router.delete("/productos/:id", (req, res) => {
     const id = req.params.id;
     const productos = Productos.splice(0, Productos.length);
-    res.send(productos);
-    res.redirect('/productos');
-}
-)
-//add productos to cart list boton agregar id productos
-router.post("/agregar/:id", (req, res) => {
-    const id = req.params.id;
-    const productos = Productos.splice(0, Productos.length);
+    const producto = productos.find(producto => producto.id == id);
+    const index = productos.indexOf(producto);
+    productos.splice(index, 1);
+
     res.send(productos);
 }
 )
 
+router.post("/productos/", (req, res) => {
+    const producto = req.body;
+    Productos.push(producto);
+    res.send(Productos);
 
 
-
-
-
-
+}
+)
 
     router.post('/productos/:id', (req, res) => {
         const id = req.params.id;
@@ -103,23 +77,6 @@ router.post("/agregar/:id", (req, res) => {
         }
     })
 
-    router.delete('/productos/:id', (req, res) => {
-        const id= req.params.id;
-        const producto = Productos.find(producto => producto.id == id);
-        if (producto) {
-            res.send(producto)
-        }
-    }
-    )
-
-router.post('/productos/:id', (req, res) => {
-    const id = req.params.id;
-    const producto = Productos.find(producto => producto.id == id);
-    if (producto) {
-        res.send( producto);
-    }
-}
-)
 
 router.use((err, req, res, next) => {
     console.error(err.stack);
@@ -156,19 +113,6 @@ router.put('/productos/:id', (req, res) => {
         res.send( { producto });
     }
     )
-
-    //show in /cart/id with cart.ejs
-    // router.get("/cart/:id", (req, res) => {
-    //     const id = req.params.id;
-    //     const producto = Productos.find(producto => producto.id == id);
-    //     res.render("cart", { producto });
-    // }
-    // )
-
-
-
-
-    
 
 router.post("/cart/:id", (req, res) => {
   const id = req.params.id;

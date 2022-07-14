@@ -7,33 +7,23 @@
 
     <title>Document</title>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="../productos.js"></script>
+
 </head>
 <body>
     <h1>CENTRO DE MENSAJES</h1>
-    <div class="milista"></div>
     <h3>Dejá acá tu información</h3>
     <div style="background-color: #f6f6f6; border: 1px solid"  id="messages"></div>
     <form onsubmit="addMessage(this)">
-        <input id="name" type="text" placeholder="Product name" required />
- 
-        <input id="description" type="text"  placeholder="Product description" required />
-    
-        <input id="price" type="number" placeholder="120.000" required />
+        <input  type="text" id="username" placeholder="Tu Nombre" >
+        <input type="text" id="texto" placeholder="Cuéntanos algo...">
+   
+        <input type="date" id="fecha" placeholder="Fecha">
         
 
 
         <input type="submit" value="Enviar">
     </form>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-<script
-			  src="https://code.jquery.com/jquery-3.6.0.min.js"
-			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-			  crossorigin="anonymous"></script>
-    <script src="main.js"></script>
-
 </body>
-
+    <script src="main.js"></script>
 
 </html>

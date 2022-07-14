@@ -6,49 +6,59 @@ const app = express();
 const httpServer = new HttpServer(app)
 const io = new IOServer(httpServer)
 const router = require("./routes.js");
-
+const { options } = require("./options/mariaDB");
+const knex = require("knex")(options);
 const Productos = require('./index.js');
 const jsonProductos = require('./productos.json');
 const datos = new Productos();
 const fs = require('fs');
+const {createTable} = require('./createTable.js');
+const {selectCards} = require('./selectCards.js');
+const {insertCards} = require('./insertCards.js');
+
+
 
 app.set("views", "./views");
 app.set("view engine", "ejs");
-
-
 app.use(express.json());
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", router);
 
-const messages = [
-    {
-        id: 1,
-        name: Productos.name,
-        price:  Productos.price,
-        info: Productos.description
-    }
+try {
+  createTable();
+  insertCards();
+  selectCards();
+}
+catch (error) {
+  console.log(error);
+}
 
 
-];
+
+const messages = [];
 
 io.on('connection',socket => {
   console.log('Un cliente se ha conectado');
-
-
   socket.emit( 'messages', messages );
-
-
-
-
   socket.on('new-message',(data) => {
     messages.push(data);
       io.sockets.emit('messages', messages);
+      console.log(data);
   });
 });
 
 
-app.get("/agregar", (req, res) => {
+
+
+
+
+
+
+
+
+
+app.get("/productos", (req, res) => {
   path.join(__dirname, './productos.json')
 
   res.render("inicio", { productos: jsonProductos });
@@ -58,14 +68,14 @@ app.get("/agregar", (req, res) => {
 
 
 //post sincronica when the form in index.html is submitted
-app.post('/agregar', (req, res) => {
+app.post('/productos', (req, res) => {
   const producto = {
     producto: req.body.producto,
     precio: req.body.precio,
     info: req.body.info,
   };
   datos.addProduct(producto);
-  res.redirect('/agregar');
+  res.redirect('/productos');
 }
 );
 
@@ -77,29 +87,8 @@ app.get("/pruebas", (req, res) => {
 }
 )
 
-
-
-
-// app.post('/agregar', (req, res) => {
-//       const agregar = req.body;
-
-// agregar.body=(path.join(__dirname, 'index.html'))
-// const producto = {
-//       id: Productos.id,
-//       name:Productos.name,
-//       price:Productos.price,
-//       description:Productos.description,
-//       image:Productos.image
-          
-// }
-// Productos.push(producto);
-// console.log(producto);
-// }
-
-// )
-
-httpServer.listen(8080, function () {
-  console.log("Servidor corriendo en http://localhost:8080");
+httpServer.listen(3000, function () {
+  console.log("Servidor corriendo en http://localhost:3000");
 });
 
 
@@ -109,7 +98,6 @@ app.get('/login', (req, res) => {
 
 }
 )
-//if username is "admin" and password is "admin" redirect to /api/productos else redirect to /
 
 const login = {
   username: 'admin',
@@ -117,16 +105,12 @@ const login = {
 }
 
 app.get('/login', (req, res) => {
- //if form is submitted redirect to /api/productos else redirect to / req login.ejs
-  
-
-  
-}
-)
+  res.render('login'); }
+  )
 app.post('/login', (req, res) => {
   if (login.username === 'admin' && login.password === 'admin') {
     res.redirect('/api/productos');
-    console.log('admin post');
+    console.log();
   }
   else {
     res.redirect('/');
@@ -136,12 +120,7 @@ app.post('/login', (req, res) => {
 }
 )
 
-  
 
-
-
-
-  //bloquear acceso a /api/productos si no es admin 
   app.get("/api/productos", (req, res) => {
     if (req.session.admin) {
       res.send(Productos);
@@ -152,7 +131,14 @@ app.post('/login', (req, res) => {
   }
   )
 
+ 
+  for(i=0; i<jsonProductos.length; i++){
+    jsonProductos[i].id = i+1;
 
+}
+app.get("/productosVisibles", (req, res) => {
+    res.send(jsonProductos);
+})
 
 
 
