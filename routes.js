@@ -4,9 +4,12 @@ const { Router } = express;
 const router = Router();
 const path = require('path');
 const fs = require('fs');
+const productosDaoArchivo = require('./daos/productosArchivo');
 
 router
 .route( '/productos')
+
+
 
 router.get("/productos/", (req , res) => {res.send(Productos);})
 

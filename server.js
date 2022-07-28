@@ -92,6 +92,6 @@ app.post('/productos', (req, res) => {
     }
   }
   )
-  httpServer.listen(3000, function () {console.log("Servidor corriendo en http://localhost:3000");});
+  httpServer.listen(3001, function () {console.log("Servidor corriendo en http://localhost:3000");});
 
 

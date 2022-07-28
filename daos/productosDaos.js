@@ -1,4 +1,4 @@
-class Product
+class ProductDAO
 {
     constructor(id, nombre, precio, info, image)
     {
@@ -8,63 +8,31 @@ class Product
         this.info = info;
         this.image = image;
     }
-
-
-
-    constructor()
-    {
-        this.productos = [];
-    }
     getAll()
     {
-        return this.productos;
+        return [this.id, this.nombre, this.precio, this.info, this.image];
     }
-    getById(id)
+
+    getId()
     {
-        return this.productos.find(producto => producto.id == id);
+        return this.id;
     }
-    add(producto)
+    getNombre()
     {
-        this.productos.push(producto);
+        return this.nombre;
     }
-    delete(id)
+    getPrecio()
     {
-        const producto = this.productos.find(producto => producto.id == id);
-        const index = this.productos.indexOf(producto);
-        this.productos.splice(index, 1);
+        return this.precio;
     }
-    update(id, producto)
+    getInfo()
     {
-        const productoActualizado = this.productos.find(producto => producto.id == id);
-        const index = this.productos.indexOf(productoActualizado);
-        this.productos[index] = producto;
+        return this.info;
     }
-}
-class ProductDAO extends Product
-{
-    constructor()
+    getImage()
     {
-        super();
+        return this.image;
     }
-    getAll()
-    {
-        return super.getAll();
-    }
-    getById(id)
-    {
-        return super.getById(id);
-    }
-    add(producto)
-    {
-        super.add(producto);
-    }
-    delete(id)
-    {
-        super.delete(id);
-    }
-    update(id, producto)
-    {
-        super.update(id, producto);
-    }
+
 }
 module.exports = ProductDAO;
