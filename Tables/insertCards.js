@@ -1,6 +1,6 @@
-const { options } = require ("./options/mariaDB");
+const { options } = require ("../options/mariaDB");
 const knex = require("knex")(options);
-const jsonProductos = require('./productos.json');
+const jsonProductos = require('../productos.json');
 knex("productosEcommerce")
   .insert(jsonProductos)
   

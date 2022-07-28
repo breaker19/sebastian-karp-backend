@@ -4,34 +4,17 @@ const { Router } = express;
 const router = Router();
 const path = require('path');
 const fs = require('fs');
-const llamadaTodos = require('./index.js');
-
-
-
 
 router
 .route( '/productos')
 
-router.get("/productos/", (req , res) => {
-  res.send(Productos);
-  
+router.get("/productos/", (req , res) => {res.send(Productos);})
 
-}
-
-)
-//productos/:id
 router.get("/productos/:id", (req , res) => {
 try {
     const producto = Productos.find(producto => producto.id == req.params.id);
-    res.render("producto", { producto });
-
-}
-catch(error) {
-    res.status(404).send("Producto no encontrado");
-}
-}
-
-)
+    res.render("producto", { producto });}
+catch(error) {res.status(404).send("Producto no encontrado");}})
 
 
 
@@ -41,14 +24,9 @@ try {
     const baseProductos = JSON.parse(req.body)
     Productos.push(baseProductos);
     res.send(Productos);}
+catch (error) {res.send(error);}
+})
 
-    catch (error) {
-        res.send(error);
-    }
-}
-
- )
-//delete by id productos
 router.delete("/productos/:id", (req, res) => {
     const id = req.params.id;
     const productos = Productos.splice(0, Productos.length);
@@ -56,26 +34,18 @@ router.delete("/productos/:id", (req, res) => {
     const index = productos.indexOf(producto);
     productos.splice(index, 1);
 
-    res.send(productos);
-}
-)
+    res.send(productos);})
 
 router.post("/productos/", (req, res) => {
     const producto = req.body;
     Productos.push(producto);
-    res.send(Productos);
-
-
-}
-)
+    res.send(Productos);})
 
     router.post('/productos/:id', (req, res) => {
         const id = req.params.id;
         const producto = Productos.find(producto => producto.id == id);
         if (producto) {
-            res.send(producto);
-        }
-    })
+            res.send(producto); }})
 
 
 router.use((err, req, res, next) => {
@@ -102,14 +72,13 @@ router.put('/productos/:id', (req, res) => {
 )
 
 
-  //get /cart
+
   router.get("/cart/", (req, res) => {
     res.render("cart", { productos: Productos });})
-    //get /cart/:id
+  
     router.get("/cart/:id", (req, res) => {
         const id = req.params.id;
         const producto = Productos.find(producto => producto.id == id);
-       //show product id in the cart
         res.send( { producto });
     }
     )
@@ -122,11 +91,11 @@ router.post("/cart/:id", (req, res) => {
   }
   else {
       res.send("No se encontró el producto");
-  }
-  
-})
+  }})
 
-
+router.get('/login', (req, res) => {
+    res.render('login');
+    })
 
 
 

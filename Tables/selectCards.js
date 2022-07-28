@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const { options } = require("./options/mariaDB");
+const { options } = require("../options/mariaDB");
 const knex = require("knex")(options);
 
 

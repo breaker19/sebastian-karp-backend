@@ -8,16 +8,15 @@ const io = new IOServer(httpServer)
 const router = require("./routes.js");
 const { options } = require("./options/mariaDB");
 const knex = require("knex")(options);
-const Productos = require('./index.js');
+const Productos = require('./controllers/index.js');
 const jsonProductos = require('./productos.json');
 const datos = new Productos();
-const fs = require('fs');
-const {createTable} = require('./createTable.js');
-const {selectCards} = require('./selectCards.js');
-const {insertCards} = require('./insertCards.js');
-
-
-
+const {createTable} = require('./Tables/createTable.js');
+const {selectCards} = require('./Tables/selectCards.js');
+const {insertCards} = require('./Tables/insertCards.js');
+const {login} = require('./login.js');
+const CRUD = require('./firebase.js');
+const cartSchema = require('./cart.js');
 app.set("views", "./views");
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -26,15 +25,31 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", router);
 
 try {
-  createTable();
-  insertCards();
-  selectCards();
-}
-catch (error) {
+  cartSchema
+  console.log('Cart Schema creado');
+} catch (error) {
   console.log(error);
+  
 }
 
 
+
+   
+      
+try{CRUD}
+catch (error) {console.log(error)}
+
+
+// try {
+//   createTable();
+//   insertCards();
+//   selectCards();
+// }
+// catch (error) {
+//   console.log(error);
+// }
+try {login();}
+catch (error) {console.log(error);}
 
 const messages = [];
 
@@ -50,14 +65,6 @@ io.on('connection',socket => {
 
 
 
-
-
-
-
-
-
-
-
 app.get("/productos", (req, res) => {
   path.join(__dirname, './productos.json')
 
@@ -66,8 +73,6 @@ app.get("/productos", (req, res) => {
   console.log(jsonProductos);
 });
 
-
-//post sincronica when the form in index.html is submitted
 app.post('/productos', (req, res) => {
   const producto = {
     producto: req.body.producto,
@@ -78,49 +83,6 @@ app.post('/productos', (req, res) => {
   res.redirect('/productos');
 }
 );
-
-
-//get todos
-app.get("/pruebas", (req, res) => {
-    res.send(todos);
-    console.log(todos);
-}
-)
-
-httpServer.listen(3000, function () {
-  console.log("Servidor corriendo en http://localhost:3000");
-});
-
-
-
-app.get('/login', (req, res) => {
-  res.render('login');
-
-}
-)
-
-const login = {
-  username: 'admin',
-  password: 'admin'
-}
-
-app.get('/login', (req, res) => {
-  res.render('login'); }
-  )
-app.post('/login', (req, res) => {
-  if (login.username === 'admin' && login.password === 'admin') {
-    res.redirect('/api/productos');
-    console.log();
-  }
-  else {
-    res.redirect('/');
-    console.log('no admin');
-  }
-
-}
-)
-
-
   app.get("/api/productos", (req, res) => {
     if (req.session.admin) {
       res.send(Productos);
@@ -130,15 +92,6 @@ app.post('/login', (req, res) => {
     }
   }
   )
-
- 
-  for(i=0; i<jsonProductos.length; i++){
-    jsonProductos[i].id = i+1;
-
-}
-app.get("/productosVisibles", (req, res) => {
-    res.send(jsonProductos);
-})
-
+  httpServer.listen(3000, function () {console.log("Servidor corriendo en http://localhost:3000");});
 
 
